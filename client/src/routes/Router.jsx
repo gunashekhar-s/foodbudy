@@ -7,7 +7,7 @@ import Reset from "../components/Reset"
 import MainContainer from "../components/MainContainer"
 import SubscriptionConatiner from "../components/SubscriptionContainer"
 import ViewPlans from "../components/ViewPlans"
-import OrderDetails from "../components/OrderDetails"
+import OrderDetails from "../components/OrderDetails";
 
 const AppRouter = () => {
     return (
@@ -22,6 +22,7 @@ const AppRouter = () => {
             <Route path="/order_summary" component={OrderDetails} />
         </>
     )
+
 }
 
 export default AppRouter
