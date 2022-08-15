@@ -24,7 +24,6 @@ export const asyncgetDetailsByPincode = (pincode, updator) => {
 }
 
 
-
 export const updateAddress = (data) => {
     return {
         type: UPDATE_NEW_ADDRESS,

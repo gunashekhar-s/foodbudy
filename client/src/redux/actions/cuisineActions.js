@@ -9,6 +9,7 @@ export const initialUpdateCuisines = (data) => {
     }
 }
 
+
 export const asyncGetCuisines = () => {
     return (dispatch) => {
         axios.get("/public/cuisines")

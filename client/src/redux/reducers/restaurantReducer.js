@@ -6,8 +6,6 @@ const initialValue = {
     error: {
         message: ""
     },
-
-
 }
 
 const restaurantReducer = (state = initialValue, action) => {

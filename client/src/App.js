@@ -21,8 +21,6 @@ function App() {
   const isAuthTokenFound = localStorage.hasOwnProperty("token")
   const dispatch = useDispatch()
 
-
-
   const restaurantDetails = useSelector((state) => {
     return state.restaurantDetails
   })
@@ -51,6 +49,7 @@ function App() {
     return state.userDetails
   })
   const history = useHistory()
+
   //if user logged in(redux), get user details
   useEffect(() => {
     if (userDetails.isUserLoggedIn) {

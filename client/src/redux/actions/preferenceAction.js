@@ -20,6 +20,7 @@ export const updateError = (error) => {
     }
 }
 
+
 export const asyncCreateNewPreference = (data, successToast) => {
     return (dispatch) => {
         axios.post("/user/preference", data, {

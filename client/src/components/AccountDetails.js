@@ -75,7 +75,6 @@ function AccountDetails(props) {
         validationSchema: validationSchemaUserForm
     })
 
-
     return (
         <Grid display="flex" direction="row" container sx={styles.internalBox} align="center" item >
             {isEdit ? (

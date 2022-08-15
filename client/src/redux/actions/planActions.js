@@ -11,6 +11,7 @@ export const updateCustomPlans = (data) => {
     }
 }
 
+
 export const asyncGetCustomPlanDetails = (preferenceId, setIsLoading) => {
     return (dispatch) => {
         axios.get(`/user/plans/${preferenceId}`, {

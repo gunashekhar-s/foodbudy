@@ -19,4 +19,5 @@ const cuisineReducer = (state = initialValue, action) => {
     }
 }
 
+
 export default cuisineReducer

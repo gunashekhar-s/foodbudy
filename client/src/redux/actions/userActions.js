@@ -243,5 +243,4 @@ export const asyncUpdateUserDetails = (data, setIsEdit, resetForm, succestoast) 
                 console.log(err)
             })
     }
-
 }

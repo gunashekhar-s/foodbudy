@@ -10,6 +10,7 @@ export const initialUpdateRestaurantDetails = (data) => {
     }
 }
 
+
 export const asyncgetRestaurantDetails = () => {
     return (dispatch) => {
         axios.get("/public/restaurant")

@@ -38,8 +38,6 @@ const style = {
         "&:hover": {
             backgroundColor: "primary.main",
             color: "white",
-
-
         },
         mx: 2
     },

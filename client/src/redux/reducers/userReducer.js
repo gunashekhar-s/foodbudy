@@ -15,7 +15,6 @@ const initialValue = {
     isLoading: true
 }
 
-
 const userReducer = (state = initialValue, action) => {
     switch (action.type) {
         case UPDATE_LOGIN_STATUS: {

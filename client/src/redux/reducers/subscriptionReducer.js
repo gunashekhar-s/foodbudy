@@ -11,6 +11,7 @@ const initialValues = {
     subscriptions: []
 }
 
+
 const subscriptionReducer = (state = initialValues, action) => {
     switch (action.type) {
         case INITIAL_UPDATE_SUBSCRIPTIONS: {

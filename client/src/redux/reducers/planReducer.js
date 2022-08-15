@@ -9,6 +9,7 @@ const initialValue = {
     startDates: {}
 }
 
+
 const planReducer = (state = initialValue, action) => {
     switch (action.type) {
         case UPDATE_CUSTOM_PLANS: {

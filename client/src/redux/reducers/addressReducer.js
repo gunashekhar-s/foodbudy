@@ -12,7 +12,6 @@ const initialValue = {
     address: {}
 }
 
-
 const addressReducer = (state = initialValue, action) => {
     switch (action.type) {
         case UPDATE_NEW_ADDRESS: {

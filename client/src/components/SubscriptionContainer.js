@@ -6,7 +6,6 @@ import NewPreference from "./NewPreference"
 import SubscriptionDetails from "./SubscriptionDetails"
 
 
-
 const SubscriptionConatiner = (props) => {
     const dispatch = useDispatch()
 

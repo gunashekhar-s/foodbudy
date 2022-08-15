@@ -29,8 +29,6 @@ const style = {
 }
 
 
-
-
 const Home = (props) => {
     const isUserLoggedin = useSelector((state) => {
         return state.userDetails.isUserLoggedIn

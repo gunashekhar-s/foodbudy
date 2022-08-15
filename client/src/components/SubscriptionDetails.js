@@ -295,4 +295,5 @@ const SubscriptionDetails = () => {
     )
 }
 
+
 export default SubscriptionDetails

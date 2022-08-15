@@ -26,4 +26,5 @@ const preferenceReducer = (state = initialValue, action) => {
     }
 }
 
+
 export default preferenceReducer
