@@ -15,6 +15,7 @@ const adminRouter = require("./routes/adminRoutes")
 const publicRouter = require('./routes/publicRoutes')
 
 configureDb()
+
 app.use(cors())
 app.use("/auth", authRouter)
 app.use("/user", userRouter)

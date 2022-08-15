@@ -36,7 +36,6 @@ userRouter.get("/subscription/:subscriptionId", authenticateUser, subscriptionCo
 userRouter.get("/subscriptions", authenticateUser, subscriptionController.showAll)
 userRouter.post("/startDates", authenticateUser, subscriptionController.startDates)
 
-
 //menu routes
 userRouter.get("/menu/:preferenceId", authenticateUser, menuController.getSevenDaysMenu)
 

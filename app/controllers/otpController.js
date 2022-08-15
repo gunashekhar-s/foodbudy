@@ -28,7 +28,6 @@ otpController.sendOtp = (req, res) => {
     //     }
     // })
 
-
 }
 
 

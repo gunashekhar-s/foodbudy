@@ -120,7 +120,6 @@ subscriptionSchema.methods.updatePaymentStatus = function (data) { // not using 
         })
 }
 
-
 const Subscription = mongoose.model("Subscription", subscriptionSchema)
 
 module.exports = Subscription

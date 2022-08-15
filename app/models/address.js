@@ -52,7 +52,6 @@ const addressSchema = new Schema({
 }, { timestamps: true })
 
 
-
 const Address = mongoose.model("Address", addressSchema)
 
 

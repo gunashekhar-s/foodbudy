@@ -12,5 +12,4 @@ const configureDb = () => {
 
 }
 
-
 module.exports = configureDb

@@ -51,7 +51,6 @@ OtpSchema.statics.generateOtpAndSend = function (newData) {
     };
     return mg.messages().send(data)
         .then((result) => {
-            console.log("result", result)
             const otpData = {
                 otp,
                 expiresIn: moment(new Date()).add(10, 'minutes').format(),

@@ -16,5 +16,6 @@ const categorySchema = new Schema({
 
 categorySchema.plugin(uniqueValidator)
 
+
 const Category = mongoose.model("Category", categorySchema)
 module.exports = Category 

@@ -1,6 +1,5 @@
 const Cuisine = require("../models/cuisine")
 
-
 const cuisineController = {}
 
 cuisineController.create = (req, res) => {

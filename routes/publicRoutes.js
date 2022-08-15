@@ -5,4 +5,5 @@ const publicRouter = express.Router()
 
 publicRouter.get("/cuisines", cuisineController.showAll)
 publicRouter.get("/restaurant", restaurantController.getRestaurantDetails)
+
 module.exports = publicRouter

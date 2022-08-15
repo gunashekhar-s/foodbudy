@@ -250,8 +250,6 @@ menuController.update = (req, res) => {
     }
 }
 
-
-
 menuController.filterByDateRange = (req, res) => {
     const body = req.body
     const startDate = body.startDate

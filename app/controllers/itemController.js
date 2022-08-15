@@ -3,7 +3,7 @@ const Item = require("../models/item")
 const itemController = {}
 itemController.create = (req, res) => {
     const body = req.body
-    //TODO: verify category id before saving 
+    //TODO: verify category id before saving
     const newItem = new Item(body)
     newItem.save()
         .then((item) => {

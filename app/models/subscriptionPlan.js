@@ -42,9 +42,6 @@ const subscriptionPlanSchema = new Schema({
 subscriptionPlanSchema.plugin(uniqueValidator);
 
 
-
-
-
 const SubscriptionPlan = mongoose.model("SubscriptionPlan", subscriptionPlanSchema)
 
 module.exports = SubscriptionPlan

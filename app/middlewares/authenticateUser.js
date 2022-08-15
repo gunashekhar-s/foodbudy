@@ -21,6 +21,7 @@ const authenticateUser = (req, res, next) => {
     }
 }
 
+
 const authorizeUser = (req, res, next) => {
     const role = req.token.role
     if (role === "admin") {
@@ -29,7 +30,5 @@ const authorizeUser = (req, res, next) => {
         res.status(401).json({ error: "Only admin can make changes" })
     }
 }
-
-
 
 module.exports = { authenticateUser, authorizeUser }

@@ -2,7 +2,6 @@ const Payment = require("../models/payment")
 const Subscription = require("../models/Subscription")
 
 
-
 const paymentController = {}
 
 paymentController.create = (req, res) => {

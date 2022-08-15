@@ -66,5 +66,4 @@ adminRouter.get("/subscriptionplan", authenticateUser, authorizeUser, subscripti
 adminRouter.put("/subscriptionplan/:subscriptionplanId", authenticateUser, authorizeUser, subscriptionPlanController.update)
 adminRouter.delete("/subscriptionplan/:subscriptionplanId", authenticateUser, authorizeUser, subscriptionPlanController.remove)
 
-
 module.exports = adminRouter

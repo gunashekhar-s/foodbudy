@@ -100,5 +100,4 @@ addressController.update = (req, res) => {
     console.log(moment().format("HH:mm").split(":"))
 }
 
-
 module.exports = addressController

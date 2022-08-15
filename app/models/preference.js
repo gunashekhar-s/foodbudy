@@ -37,7 +37,6 @@ const preferenceSchema = new Schema({
 
 }, { collation: { locale: 'en_US', strength: 2 } }, { timestamps: true })
 
-
 const Preference = mongoose.model("Preference", preferenceSchema)
 
 module.exports = Preference

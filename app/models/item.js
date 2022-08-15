@@ -39,6 +39,7 @@ const itemSchema = new Schema({
 
 
 itemSchema.plugin(uniqueValidator)
+
 const Item = mongoose.model("Item", itemSchema)
 
 module.exports = Item

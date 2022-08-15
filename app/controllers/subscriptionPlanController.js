@@ -91,5 +91,4 @@ subscriptionPlanController.remove = (req, res) => {
         })
 }
 
-
 module.exports = subscriptionPlanController

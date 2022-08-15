@@ -64,4 +64,5 @@ restaurantController.getRestaurantDetails = (req, res) => {
 
 }
 
+
 module.exports = restaurantController

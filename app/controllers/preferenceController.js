@@ -64,4 +64,5 @@ preferenceController.find = (req, res) => {
         })
 }
 
+
 module.exports = preferenceController

@@ -22,7 +22,8 @@ const cuisineSchema = new Schema({
 
 
 
-cuisineSchema.plugin(uniqueValidator);
+cuisineSchema.plugin(uniqueValidator)
+
 const Cuisine = mongoose.model("Cuisine", cuisineSchema)
 
 module.exports = Cuisine

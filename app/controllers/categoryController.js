@@ -65,6 +65,4 @@ categoryController.show = (req, res) => {
         })
 }
 
-
-
 module.exports = categoryController
