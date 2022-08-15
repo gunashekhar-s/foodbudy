@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../../config/axios"
 import { toast } from "react-toastify"
 
 export const INITIAL_UPDATE_RESTAURANT_DETAILS = "INITIAL_UPDATE_RESTAURANT_DETAILS"
@@ -12,7 +12,7 @@ export const initialUpdateRestaurantDetails = (data) => {
 
 export const asyncgetRestaurantDetails = () => {
     return (dispatch) => {
-        axios.get("http://localhost:3040/public/restaurant")
+        axios.get("/public/restaurant")
             .then((response) => {
                 const result = response.data
                 dispatch(initialUpdateRestaurantDetails({ ...result, isLoading: false, error: { message: "" } }))

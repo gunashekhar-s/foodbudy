@@ -1,4 +1,5 @@
 const Item = require("../models/item")
+const Combo = require("../models/combo")
 
 const comboController = {}
 
@@ -21,9 +22,11 @@ comboController.create = (req, res) => {
                 nutritionFacts.protein += item.nutritionFacts.protein
             })
             body.nutritionFacts = nutritionFacts
+
             const newCombo = new Combo(body)
             newCombo.save()
                 .then((combo) => {
+
                     res.json({ message: "combo created", combo: combo })
                 })
                 .catch((err) => {
@@ -91,38 +94,6 @@ comboController.remove = (req, res) => {
         })
 }
 
-//COMBINED BOTH FILTERS INTO A SINGLE FILTER
-
-// comboController.filterComboByIsVeg = (req, res) => {
-//     const isVeg = req.body.isVeg
-//     if (typeof isVeg !== "boolean") {
-//         res.json({ error: "isVeg boolean value must be provided" })
-//     } else {
-//         Combo.find({ isVeg: isVeg })
-//             .then((combos) => {
-//                 res.json(combos)
-//             })
-//             .catch((err) => {
-//                 res.json(err)
-//             })
-//     }
-// }
-// comboController.filterComboByCusine = (req, res) => {
-//     const cuisineId = req.body.cuisineId
-//     if (!cuisineId) {
-//         res.json({ error: "cuisines id must be provided" })
-//     } else {
-//         Combo.find({ cuisineRef: cuisineId })
-//             .then((combos) => {
-//                 res.json(combos)
-//             })
-//             .catch((err) => {
-//                 res.json(err)
-//             })
-//     }
-// }
-
-//single filter for veg and cuisine
 comboController.filterComboByIsVegAndCuisine = (req, res) => {
     const cuisineId = req.body.cuisineRef
     const isVeg = req.body.isVeg

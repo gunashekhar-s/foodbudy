@@ -42,7 +42,7 @@ const SignIn = (props) => {
 
     const initialValues = {
         email: "foodbuddy1@outlook.com",
-        password: "Admin@123"
+        password: "foodbuddy1@outlook.com"
     }
 
     const validationSchema = Yup.object({

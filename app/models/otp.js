@@ -39,8 +39,10 @@ OtpSchema.statics.generateOtpAndSend = function (newData) {
     const otpFor = newData.verificationFor === "reset" ? "Password Reset" : "Registration"
     const otp = generateNewOtp()
 
-    const DOMAIN = 'sandboxe90e2aa99f7c40fd9bb5941790a66279.mailgun.org';
-    const mg = mailgun({ apiKey: "ccd430d4ee32791dd50d37a3463ecdb1-787e6567-24f721b4", domain: DOMAIN });
+    // const DOMAIN = 'sandboxe90e2aa99f7c40fd9bb5941790a66279.mailgun.org';
+    // const mg = mailgun({ apiKey: "ccd430d4ee32791dd50d37a3463ecdb1-787e6567-24f721b4", domain: DOMAIN });
+    const DOMAIN = 'sandbox3caf9af958554de2a39d2b674a992afd.mailgun.org';
+    const mg = mailgun({ apiKey: "cf3514cd7b2a289c4dd96a4b3c580274-4dd50799-f43d51f8", domain: DOMAIN });
     const data = {
         from: process.env.EMAIL,
         to: newData.email,
@@ -49,6 +51,7 @@ OtpSchema.statics.generateOtpAndSend = function (newData) {
     };
     return mg.messages().send(data)
         .then((result) => {
+            console.log("result", result)
             const otpData = {
                 otp,
                 expiresIn: moment(new Date()).add(10, 'minutes').format(),
@@ -60,16 +63,18 @@ OtpSchema.statics.generateOtpAndSend = function (newData) {
             const newOtp = new this(otpData)
             return newOtp.save()
                 .then((otp) => {
-
                     // encrypting details and sending it as cerification key to client
                     const encoded = CryptoJS.AES.encrypt(JSON.stringify({ ...otpData, otpId: otp._id }), process.env.CRYPTO_JS_SECRET_KEY).toString()
+
                     return Promise.resolve({ message: "otp sent", certificationKey: encoded })
                 })
                 .catch((err) => {
+
                     return Promise.reject(err)
                 })
         })
         .catch((err) => {
+
             console.log(err)
             return Promise.reject({ error: "unable to send email" })
 

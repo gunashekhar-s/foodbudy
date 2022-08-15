@@ -22,20 +22,14 @@ const authenticateUser = (req, res, next) => {
 }
 
 const authorizeUser = (req, res, next) => {
-
-    next()
+    const role = req.token.role
+    if (role === "admin") {
+        next()
+    } else {
+        res.status(401).json({ error: "Only admin can make changes" })
+    }
 }
 
-// User.findById({ _id: userId }, "_id role")
-// .then((user) => {
-//     if(!user){
-//         res.json()
-//     }
-
-// })
-// .catch((err) => {
-//     res.json(err)
-// })
 
 
 module.exports = { authenticateUser, authorizeUser }

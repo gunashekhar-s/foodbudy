@@ -65,36 +65,14 @@ const SignUp = (props) => {
         const newData = { ...data, verificationFor }
         dispatch(asyncGenerateRegisterOtp(newData, { setErrors, resetForm }, setIsLoading, setCertificationKey, errorToast, setOtpSent))
 
-        // making API call -  without redux (test)
-        // axios.post("http://localhost:3040/auth/sendotp", { ...data, verificationFor })
-        //     .then((response) => {
-        //         const data = response.data
-        //         if (data.error === "unable to send email") {
-        //             setIsLoading(false)
-        //             errorToast("Try Again Later")
-        //             resetForm()
-        //         } else if (data.error && data.error.includes("email")) {
-        //             setErrors({ email: data.error })
-        //             setIsLoading(false)
-        //         } else if (data.message === "otp sent") {
-        //             setOtpSent(true)
-        //             setIsLoading(false)
-        //             setCertificationKey(data.certificationKey)
-        //         } else {
-        //             console.log(data)
-        //             setIsLoading(false)
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log(err)
-        //     })
+
     }
     const intialValuesContinueForm = {
         username: "",
         email: "",
         password: ""
     }
-    const validationSchemaConinueForm = Yup.object({
+    const validationSchemaContinueForm = Yup.object({
         username: Yup.string()
             .required("Username required")
             .min(3, "Username must contain atleast 3 characters")
@@ -115,55 +93,14 @@ const SignUp = (props) => {
         onSubmit: (data, { setErrors, resetForm }) => {
             handleContinueFormSubmit(data, { setErrors, resetForm })
         },
-        validationSchema: validationSchemaConinueForm
+        validationSchema: validationSchemaContinueForm
     })
 
     //verifiy form
     const handleVerifyFormSubmit = (data, { setErrors, resetForm }) => {
-        // making API call -  without redux (test)
-
-
         const newData = { ...data, certificationKey, verificationFor, ...formik.values }
         dispatch(asyncVerifyRegisterOtp(newData, { setErrors, resetForm }, errorToast, successToast, setOtpSent, history, formik.resetForm))
-        // axios.post("http://localhost:3040/auth/verify", newData)
-        //     .then((response) => {
-        //         const data = response.data
-        //         if (data.error === "OTP cannot be empty") {
-        //             setErrors({ otp: data.error })
-        //         } else if (data.error === "Invalid OTP") {
-        //             setErrors({ otp: data.error })
-        //         } else if (data.error === "OTP already used or verified" || data.error === "OTP was not sent for this request" || data.error === "OTP Expired") {
-        //             resetForm()
-        //             errorToast(data.error)
-        //             setOtpSent(false)
-        //             formik.resetForm()
-        //         } else if (data.message === "registered") {
-        //             toast.success("Registered Successfully", {
-        //                 position: "top-center",
-        //                 autoClose: 1500,
-        //                 hideProgressBar: true,
-        //                 closeOnClick: true,
-        //                 pauseOnHover: false,
-        //                 draggable: true,
-        //                 progress: undefined,
-        //                 width: "200"
-        //             })
-        //             resetForm()
-        //             setOtpSent(false)
-        //             formik.resetForm()
-        //             props.history.push("/login")
-        //         }
-        //         else {
-        //             console.log(data)
-        //             resetForm()
-        //             errorToast("Try Again Later!")
-        //             setOtpSent(false)
-        //             formik.resetForm()
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log(err)
-        //     })
+
     }
 
     const initialValuesVerifyForm = { otp: "" }
@@ -341,7 +278,7 @@ const SignUp = (props) => {
                                 </Button>
                                 <Grid container>
                                     <Grid item xs>
-                                        <Link to="/register" style={styles.link}>
+                                        <Link to="/register" style={styles.link} onClick={() => { setOtpSent(false) }}>
                                             {"Start Again"}
                                         </Link>
                                     </Grid>

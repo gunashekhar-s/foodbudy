@@ -89,8 +89,10 @@ userSchema.statics.checkEmailAndGenerateOtp = function (data) {
             if (user && verificationFor === "register") {
                 return Promise.reject({ error: "email already exists" })
             } else if (!user && verificationFor === "register") {
+
                 return OTP.generateOtpAndSend(data)
             } else if (!user && verificationFor === "reset") {
+
                 return Promise.reject({ error: "email doesn't exist" })
             } else if (user && verificationFor === "reset") {
                 return OTP.generateOtpAndSend(data)

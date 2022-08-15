@@ -15,6 +15,11 @@ const subscriptionSchema = new Schema({
         ref: "SubscriptionPlan",
         required: [true, "subscriptionPlanId must be provided"]
     },
+    addressRef: {
+        type: Schema.Types.ObjectId,
+        ref: "Address",
+        required: [true, "addressId must be provided"]
+    },
     mealsDetails: [{
         meals: {
             type: String,
@@ -61,10 +66,7 @@ const subscriptionSchema = new Schema({
         }
 
     }],
-    finalAmountPerDay: {
-        type: Number,
-        required: [true, "final amount must be provided"]
-    },
+
     finalAmount: {
         type: Number,
         required: [true, "final amount must be provided"]
@@ -93,12 +95,11 @@ const subscriptionSchema = new Schema({
 
 
 //instance methods
-subscriptionSchema.methods.updatePaymentStatus = function (data) {
+subscriptionSchema.methods.updatePaymentStatus = function (data) { // not using right now
     const subscription = this
     subscription.paymentStatus = "success"
     return subscription.save()
         .then(sub => {
-            console.log("data", sub)
 
             const subscriptionRef = sub._id
             const transactionAmountInPaisa = sub.orderAmountInPaisa
@@ -111,21 +112,6 @@ subscriptionSchema.methods.updatePaymentStatus = function (data) {
             const orders = []
 
             const dates = []
-            // console.log(moment(sub.startDate).isAfter(moment().format('YYYY-MM-DD')))
-            // console.log(moment(sub.startDate).add(1, "days").format('YYYY-MM-DD'))]
-            // console.log(sub.startDate)
-            // for (let i = sub.startDate; !moment(i).isAfter(sub.endDate); i = moment(i).add(1, "days").format('YYYY-MM-DD')) {
-            //     console.log(sub.startDate)
-            // }
-
-
-
-
-            // return newPayment.save()
-            //     .then(payment => {
-            //         //order must be created
-
-            //     })
 
         })
         .catch((err) => {

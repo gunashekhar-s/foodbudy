@@ -80,6 +80,5 @@ itemController.filteredItems = (req, res) => {
             })
     }
 }
-//need to add filter for only veg
 
 module.exports = itemController

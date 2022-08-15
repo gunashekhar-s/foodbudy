@@ -24,9 +24,9 @@ const paymentSchema = new Schema({
         trim: true,
         required: [true, "order_id  is required"]
     },
-    transactionAmountInPaisa: {
+    orderAmountInPaisa: {
         type: Number,
-        reuired: [true, "transaction amount is required"]
+        required: [true, "transaction amount is required"]
     }
 
 }, { timestamps: true })

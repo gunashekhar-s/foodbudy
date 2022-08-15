@@ -1,5 +1,4 @@
 const express = require("express")
-const otpController = require("../app/controllers/otpController")
 const authRouter = express.Router()
 const userController = require("../app/controllers/userController")
 

@@ -9,7 +9,7 @@ const configureDb = () => {
         .catch(() => {
             console.log("error connecting db food_app_v1_dbs")
         })
-        
+
 }
 
 

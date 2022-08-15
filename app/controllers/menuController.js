@@ -12,7 +12,6 @@ menuController.create = (req, res) => {
         res.json({ error: "menu date is required" })
     }
     else {
-        // need to decide whether to use id or just restaurant[0] from Restaurant.find()
         Restaurant.findById(body.restaurantId)
             .then((restaurant) => {
                 if (!restaurant) {

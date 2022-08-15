@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../../config/axios"
 
 export const INITIAL_MENU_UDPATE = "INITIAL_MENU_UDPATE"
 
@@ -11,7 +11,7 @@ export const initialUpdateMenu = (data) => {
 
 export const asyncGetInitialMenu = (id) => {
     return (dispatch) => {
-        axios.get(`http://localhost:3040/user/menu/${id}`, {
+        axios.get(`/user/menu/${id}`, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }

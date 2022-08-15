@@ -22,6 +22,7 @@ function App() {
   const dispatch = useDispatch()
 
 
+
   const restaurantDetails = useSelector((state) => {
     return state.restaurantDetails
   })

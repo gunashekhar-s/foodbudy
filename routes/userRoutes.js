@@ -7,9 +7,11 @@ const { authenticateUser } = require("../app/middlewares/authenticateUser")
 const subscriptionController = require("../app/controllers/subscriptionController")
 const menuController = require("../app/controllers/menuController")
 const subscriptionPlanController = require("../app/controllers/subscriptionPlanController")
+const paymentController = require("../app/controllers/paymentController")
 
-
+//account
 userRouter.get("/account", authenticateUser, userController.findUser)
+userRouter.post("/update", authenticateUser, userController.updateUser)
 
 // preferences routes
 userRouter.post("/preference", authenticateUser, preferenceController.create)
@@ -31,10 +33,14 @@ userRouter.get("/plans/:preferenceId", authenticateUser, subscriptionPlanControl
 userRouter.post("/subscription", authenticateUser, subscriptionController.create)
 userRouter.post("/verify", authenticateUser, subscriptionController.updateVerifyAndUpdatePayment)
 userRouter.get("/subscription/:subscriptionId", authenticateUser, subscriptionController.show)
+userRouter.get("/subscriptions", authenticateUser, subscriptionController.showAll)
 userRouter.post("/startDates", authenticateUser, subscriptionController.startDates)
 
 
 //menu routes
 userRouter.get("/menu/:preferenceId", authenticateUser, menuController.getSevenDaysMenu)
 
+
+//payment route
+userRouter.post("/subscription/payment", authenticateUser, paymentController.create)
 module.exports = userRouter

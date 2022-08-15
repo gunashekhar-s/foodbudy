@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../../config/axios"
 export const UPDATE_LOGIN_STATUS = "UPDATE_LOGIN_STATUS"
 export const UPDATE_USER_DETAILS = "UPDATE_USER_DETAILS"
 export const LOGOUT_RESET = "LOGOUT_RESET"
@@ -12,7 +12,6 @@ export const loginToggle = () => {
 }
 
 export const initialValueReset = () => {
-    console.log("here reset")
     return {
         type: LOGOUT_RESET
     }
@@ -35,7 +34,7 @@ export const updateUserDetails = (data) => {
 export const asyncResetSendOtp = (data, { setErrors, resetForm }, setIsLoading, setOtpSent, setCertificationKey, errorToast) => {
 
     return (dispatch) => {
-        axios.post("http://localhost:3040/auth/sendotp", data)
+        axios.post("/auth/sendotp", data)
             .then((response) => {
                 const data = response.data
                 console.log(data)
@@ -65,7 +64,7 @@ export const asyncResetSendOtp = (data, { setErrors, resetForm }, setIsLoading, 
 
 export const asyncResetVerifyOtp = (data, { setErrors, resetForm }, errorToast, setOtpSent, successToast, redirect) => {
     return (dispatch) => {
-        axios.post("http://localhost:3040/auth/verify", data)
+        axios.post("/auth/verify", data)
             .then((response) => {
                 const data = response.data
                 console.log(data)
@@ -101,7 +100,7 @@ export const asyncResetVerifyOtp = (data, { setErrors, resetForm }, errorToast, 
 //login api call
 export const asyncAuthLogin = (data, setError, history) => {
     return (dispatch) => {
-        axios.post("http://localhost:3040/auth/login", data)
+        axios.post("/auth/login", data)
             .then((response) => {
                 const data = response.data
                 if (data.error) {
@@ -125,7 +124,7 @@ export const asyncAuthLogin = (data, setError, history) => {
 export const asyncGenerateRegisterOtp = (newData, { setErrors, resetForm }, setIsLoading, setCertificationKey, errorToast, setOtpSent) => {
     return (dispatch) => {
 
-        axios.post("http://localhost:3040/auth/sendotp", newData)
+        axios.post("/auth/sendotp", newData)
             .then((response) => {
                 const result = response.data
                 if (result.error === "unable to send email") {
@@ -152,7 +151,7 @@ export const asyncGenerateRegisterOtp = (newData, { setErrors, resetForm }, setI
 
 export const asyncVerifyRegisterOtp = (newData, { setErrors, resetForm }, errorToast, successToast, setOtpSent, history, continueFormReset) => {
     return (dispatch) => {
-        axios.post("http://localhost:3040/auth/verify", newData)
+        axios.post("/auth/verify", newData)
             .then((response) => {
                 const result = response.data
                 if (result.error === "OTP cannot be empty") {
@@ -188,7 +187,7 @@ export const asyncVerifyRegisterOtp = (newData, { setErrors, resetForm }, errorT
 // fetch user data - post login
 export const asyncGetUserDetails = (history) => {
     return (dispatch) => {
-        axios.get("http://localhost:3040/user/account", {
+        axios.get("/user/account", {
             headers: {
                 'Authorization': localStorage.getItem("token")
             }
@@ -219,4 +218,30 @@ export const asyncGetUserDetails = (history) => {
                 }
             })
     }
+}
+
+//api call - update user account details
+export const asyncUpdateUserDetails = (data, setIsEdit, resetForm, succestoast) => {
+    return (dispatch) => {
+        axios.post("/user/update", data, {
+            headers: {
+                'Authorization': localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                const result = response.data
+                if (result.message === "user details updated") {
+                    dispatch(updateUserDetails(result.user))
+                    resetForm()
+                    setIsEdit(false)
+                    succestoast("Details Updated!")
+                } else {
+                    console.log(result)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
 }

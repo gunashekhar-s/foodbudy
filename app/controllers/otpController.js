@@ -1,4 +1,4 @@
-const otpController = {}
+const otpController = {} // not using
 otpController.sendOtp = (req, res) => {
     // const body = req.body
     // const otpFor = body.verificationFor === "reset" ? "Password Reset" : "Registration"

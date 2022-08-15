@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../../config/axios"
 
 export const INITIAL_UPDATE_CUSINES = "INITIAL_UPDATE_CUSINES"
 
@@ -11,7 +11,7 @@ export const initialUpdateCuisines = (data) => {
 
 export const asyncGetCuisines = () => {
     return (dispatch) => {
-        axios.get("http://localhost:3040/public/cuisines")
+        axios.get("/public/cuisines")
             .then((response) => {
                 const result = response.data
                 if (Array.isArray(result)) {

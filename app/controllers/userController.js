@@ -1,7 +1,7 @@
 const User = require("../models/user")
 const isEmail = require("validator/lib/isEmail")
 const userController = {}
-
+const _ = require("lodash")
 userController.register = (req, res) => {
     const body = req.body
     const newUser = new User(body)
@@ -90,6 +90,30 @@ userController.checkOtpAndRegisterOrReset = (req, res) => {
                 res.json(err)
             })
     }
+}
+
+userController.updateUser = (req, res) => {
+    const body = req.body
+    User.findById(req.token._id)
+        .then((user) => {
+            if (!user) {
+                res.json({ error: 'invalid user id' })
+            } else {
+                user.username = body.username
+                user.password = body.password
+                user.save()
+                    .then((user) => {
+                        res.json({ message: "user details updated", user: _.pick(user, ["email", "username", "_id", "role"]) })
+                    })
+            }
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+
+
+
+
 }
 
 

@@ -1,11 +1,11 @@
-import axios from "axios"
+import Axios from "axios"
+import axios from "../../config/axios"
 export const UPDATE_NEW_ADDRESS = "UPDATE_NEW_ADDRESS"
 export const UPDATE_ADDRESS_ERROR = "UPDATE_ADDRESS_ERROR"
 
-
 export const asyncgetDetailsByPincode = (pincode, updator) => {
     return (dispatch) => {
-        axios.get(`http://postalpincode.in/api/pincode/${pincode}`)
+        Axios.get(`http://postalpincode.in/api/pincode/${pincode}`)
             .then((response) => {
                 const result = response.data
                 if (result.Status === "Error") {
@@ -35,7 +35,7 @@ export const updateAddress = (data) => {
 
 export const asyncCreateAddress = (data, notify, handleClose) => {
     return (dispatch) => {
-        axios.post("http://localhost:3040/user/address", data, {
+        axios.post("/user/address", data, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
@@ -72,7 +72,7 @@ export const updateAddressError = (errorMessage) => {
 
 export const asyncGetAddress = (id) => {
     return (dispatch) => {
-        axios.get(`http://localhost:3040/user/address/${id}`, {
+        axios.get(`user/address/${id}`, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }

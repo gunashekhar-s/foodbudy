@@ -3,8 +3,10 @@ import { Divider, Drawer, Toolbar, useMediaQuery } from "@mui/material"
 import { Box } from "@mui/system"
 import { useSelector } from "react-redux"
 import { Route } from "react-router-dom"
+import AccountDetails from "./AccountDetails"
 import AddressContainer from "./AddressContainer"
 import NavigationMenu from "./NavigationMenu"
+import SubscriptionViewer from "./SubscriptionsViewer"
 
 
 const MainContainer = (props) => {
@@ -41,6 +43,9 @@ const MainContainer = (props) => {
 
                 <Toolbar />
                 <Route path="/user/address" component={AddressContainer} />
+                <Route path="/user/subscriptions" component={SubscriptionViewer} />
+                <Route path="/user/account" component={AccountDetails} />
+
 
 
             </Box>

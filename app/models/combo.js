@@ -37,12 +37,6 @@ const comboSchema = new Schema({
         required: true
     },
     categories: [subSchemaCategories],
-    Price: {
-        type: Number,
-        required: [true, "Price cannot be empty"],
-        min: 50, //temp data
-        max: 2000 //temp data
-    },
     nutritionFacts: {
         carbs: {
             type: Number,

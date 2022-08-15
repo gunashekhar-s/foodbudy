@@ -1,5 +1,3 @@
-
-
 import { useTheme } from '@emotion/react';
 import moment from "moment"
 import { Grid, TextField, FormControl, Divider, Toolbar, Typography, useMediaQuery, MenuItem, InputLabel, Select, Modal, Button } from '@mui/material';
@@ -25,7 +23,9 @@ import CustomBreadCrumbs from './CustomBreadCrumbs';
 import { cloneDeep } from 'lodash';
 import { asyncUpdatePreference } from '../redux/actions/preferenceAction';
 import Swal from 'sweetalert2';
-import { asyncCreateSubscription } from '../redux/actions/subscriptionActions';
+import { asyncCreateSubscription, asyncSubscriptionConfirmation } from '../redux/actions/subscriptionActions';
+import Logo from "../images/logo.png"
+import { toast } from 'react-toastify';
 const style = {
     internalBox: {
         display: "flex",
@@ -84,10 +84,12 @@ function OrderDetails(props) {
     const dispatch = useDispatch()
     const isMobile = useMediaQuery(theme.breakpoints.down("md"))
     const [startDates, setStartDates] = useState({})
-    const [quantities, setQuantities] = useState([])
+    const [quantities, setQuantities] = useState({})
     const [isAddressFormOpen, setIsAddressFormOpen] = useState(false)
     const [selectedPlanDetails, setSelectedPlanDetails] = useState({})
     const [total, setTotal] = useState("")
+    const [buttonClicked, setButtonClicked] = useState(false)
+
     // calculate total
     useEffect(() => {
         if (selectedPlanDetails._id && Object.keys(quantities).length > 0) {
@@ -121,6 +123,9 @@ function OrderDetails(props) {
 
     const preferenceId = useSelector((state) => {
         return state.preferenceDetails.preference._id
+    })
+    const userData = useSelector((state) => {
+        return state.userDetails.user
     })
 
     useEffect(() => {
@@ -206,14 +211,114 @@ function OrderDetails(props) {
     }
 
     const handlePaymentClick = () => {
+        setButtonClicked(true)
         const data = {
             selectedPlanId: planDetails.selectedPlanId,
             quantities,
             startDates,
             preferenceId,
+            restaurantId,
             addressId: addressDetails.address._id
         }
-        dispatch(asyncCreateSubscription(data))
+        dispatch(asyncCreateSubscription(data, displayRazorpay))
+    }
+
+    //adding razorpay checkout script tag by creating element 
+    const loadScript = () => {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script')
+            script.src = "https://checkout.razorpay.com/v1/checkout.js"
+            document.body.appendChild(script)
+            script.onload = () => {
+                resolve(true)
+            }
+            script.onerror = () => {
+                resolve(false)
+            }
+        })
+    }
+    useEffect(() => {
+        loadScript()
+    }, [])
+    const displayRazorpay = async (orderAmountInPaisa, order_id, subscriptionRef) => {
+        const errorToast = (string) => {
+            toast.error(string, {
+                position: "top-center",
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                width: "200"
+            })
+        }
+        const successToast = (string) => {
+            toast.success(string, {
+                position: "top-center",
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                width: "200"
+            })
+        }
+
+        const res = await loadScript()
+
+        if (!res) {
+            console.log("razorpay load error")
+        } else {
+            const options = {
+                "key": "",
+                "amount": `${orderAmountInPaisa}`,
+                "currency": "INR",
+                "name": "FoodBuddy Inc.",
+                "description": "New Subscription on FoodBuddy",
+                "image": Logo,
+                "order_id": `${order_id}`,
+                "modal": {
+                    "ondismiss": function () {
+                        // on cancellation/failure redirect
+                        history.push("/user/subscriptions")
+                        errorToast("Payment Failed, Try Again")
+                    }
+                },
+                "handler": function (response) {
+                    //handle payment success
+                    dispatch(asyncSubscriptionConfirmation({ subscriptionRef, orderAmountInPaisa, payment_id: response.razorpay_payment_id, order_id: response.razorpay_order_id, signature: response.razorpay_signature }, history, successToast))
+
+                },
+                "prefill": {
+                    "name": userData.username,
+                    "email": userData.email,
+                },
+                "notes": {
+                    "address": "Head Office - Bangalore"
+                },
+                "theme": {
+                    "color": "#541554"
+                }
+            };
+            var rzp1 = new window.Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+                //handle payment failure
+                // errorToast("Payment Failed, Try Again")
+                // history.push("/user/subscriptions")
+                // rzp1.close()
+                // alert(response.error.code);
+                // alert(response.error.description);
+                // alert(response.error.source);
+                // alert(response.error.step);
+                // alert(response.error.reason);
+                // alert(response.error.metadata.order_id);
+                // alert(response.error.metadata.payment_id);
+            });
+        }
+        rzp1.open();
+
     }
 
 
@@ -365,7 +470,7 @@ function OrderDetails(props) {
 
                                 <Grid item xs={12} display="flex" direction="row" container align="center" alignItems="center" sx={{ mt: 3 }}>
                                     <Grid item xs={12}>
-                                        <Button variant="contained" size="large" sx={{ width: "100%", maxWidth: "240px" }} onClick={handlePaymentClick}>Make Payment</Button>
+                                        <Button variant="contained" size="large" sx={{ width: "100%", maxWidth: "240px" }} onClick={handlePaymentClick} disabled={buttonClicked}>Make Payment</Button>
                                     </Grid>
                                 </Grid>
                             </Grid>

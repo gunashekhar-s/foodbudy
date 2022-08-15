@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../../config/axios"
 export const INITIAL_UPDATE_PREFERENCE = "INITIAL_UPDATE_PREFERENCE"
 export const UPDATE_PREFERENCE_ERROR = "UPDATE_PREFERENCE_ERROR"
 
@@ -22,7 +22,7 @@ export const updateError = (error) => {
 
 export const asyncCreateNewPreference = (data, successToast) => {
     return (dispatch) => {
-        axios.post("http://localhost:3040/user/preference", data, {
+        axios.post("/user/preference", data, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
@@ -46,7 +46,7 @@ export const asyncCreateNewPreference = (data, successToast) => {
 
 export const asyncUpdatePreference = (id, data, successToast, handleClose) => {
     return (dispatch) => {
-        axios.put(`http://localhost:3040/user/preference/${id}`, data, {
+        axios.put(`/user/preference/${id}`, data, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
@@ -76,7 +76,7 @@ export const asyncUpdatePreference = (id, data, successToast, handleClose) => {
 
 export const asyncGetUserPreference = (id) => {
     return (dispatch) => {
-        axios.get(`http://localhost:3040/user/preference/${id}`, {
+        axios.get(`/user/preference/${id}`, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }

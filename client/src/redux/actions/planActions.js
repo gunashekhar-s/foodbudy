@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../../config/axios"
 
 export const UPDATE_CUSTOM_PLANS = "UPDATE_CUSTOM_PLANS"
 export const UPDATE_SELECTED_PLAN_ID = "UPDATE_SELECTED_PLAN_ID"
@@ -13,14 +13,14 @@ export const updateCustomPlans = (data) => {
 
 export const asyncGetCustomPlanDetails = (preferenceId, setIsLoading) => {
     return (dispatch) => {
-        axios.get(`http://localhost:3040/user/plans/${preferenceId}`, {
+        axios.get(`/user/plans/${preferenceId}`, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
         })
             .then((response) => {
                 const result = response.data
-                if (result.plans.length > 0) {
+                if (result.plans?.length > 0) {
                     const sortedPlans = result.plans.sort((x, y) => {
                         if (x.days < y.days) {
                             return -1
@@ -59,7 +59,7 @@ export const updateStartDates = (dates) => {
 
 export const asyncGetStartDateForSelectedPlan = (data) => {
     return (dispatch) => {
-        axios.post("http://localhost:3040/user/startDates", data, {
+        axios.post("/user/startDates", data, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }

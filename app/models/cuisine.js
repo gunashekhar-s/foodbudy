@@ -10,9 +10,7 @@ const cuisineSchema = new Schema({
         trim: true,
         minlength: 4,
         maxlength: 128,
-        unique: true,
-        // index: { unique: true, collation: { locale: 'en', strength: 2 } }
-
+        unique: true
     },
     img: {
         type: String,

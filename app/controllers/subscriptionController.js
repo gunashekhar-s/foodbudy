@@ -3,97 +3,102 @@ const SubscriptionPlan = require("../models/subscriptionPlan")
 const Address = require("../models/address")
 const Preference = require("../models/preference")
 const moment = require("moment")
+const Razorpay = require('razorpay')
+const Subscription = require("../models/Subscription")
 
 const subscriptionController = {}
 
 subscriptionController.create = (req, res) => {
     const body = req.body
     //TODO handle start date - form filled with start date but submitted at later time, this might cause placing order for past time
-    console.log("body", body)
-    // Restaurant.findById(body.restaurantId)
-    //     .then((restaurant) => {
-    //         if (!restaurant) {
-    //             res.json({ error: "invalid restaurantId" })
-    //         } else {
-    //             const id = body.subscriptionPlanId
-    //             SubscriptionPlan.findById(id)
-    //                 .then((plan) => {
-    //                     if (!plan) {
-    //                         res.json({ error: "invalid subscriptionPlanId" })
-    //                     } else {
-    //                         Address.findById(body.addressId)
-    //                             .then((address) => {
-    //                                 if (!address) {
-    //                                     res.json({ error: "invalid addressId" })
-    //                                 } else {
-    //                                     Preference.findById(body.preferenceId)
-    //                                         .then((preference) => {
-    //                                             if (!preference) {
-    //                                                 res.json({ error: "invalid preferenceId" })
-    //                                             } else {
-    //                                                 //hanlde object cretaion here
-    //                                                 const mealsDetails = body.mealsDetails.map(meal => {
-    //                                                     const endDate = moment(meal.startDate).add(plan.days, "days").format("YYYY-MM-DD")
-    //                                                     const pricePerMeal = plan.pricePerDay
-    //                                                     const pricePerDay = meal.quantity * pricePerMeal
-    //                                                     const totalAmount = pricePerDay * plan.days
-    //                                                     const addressRef = meal.addressId
-    //                                                     const cuisineRef = meal.cuisineId
-    //                                                     const { addressId, cuisineId, ...data } = meal
+    Restaurant.findById(body.restaurantId)
+        .then((restaurant) => {
+            if (!restaurant) {
+                res.json({ error: "invalid restaurantId" })
+            } else {
+                const id = body.selectedPlanId
+                SubscriptionPlan.findById(id)
+                    .then((plan) => {
+                        if (!plan) {
+                            res.json({ error: "invalid subscriptionPlanId" })
+                        } else {
+                            Address.findById(body.addressId)
+                                .then((address) => {
+                                    if (!address) {
+                                        res.json({ error: "invalid addressId" })
+                                    } else {
+                                        Preference.findById(body.preferenceId)
+                                            .then((preference) => {
+                                                if (!preference) {
+                                                    res.json({ error: "invalid preferenceId" })
+                                                } else {
+                                                    const mealSessions = preference.mealSessions.map(meal => {
+                                                        return {
+                                                            meals: meal,
+                                                            startDate: body.startDates[meal],
+                                                            endDate: moment(body.startDates[meal]).add(plan.days, "days"),
+                                                            pricePerMeal: plan.pricePerDay,
+                                                            pricePerDay: plan.pricePerDay * body.quantities[meal],
+                                                            totalAmount: plan.pricePerDay * body.quantities[meal] * plan.days,
+                                                            quantity: body.quantities[meal],
+                                                            isVeg: preference.isVeg,
+                                                            cuisineRef: preference.cuisineRef,
+                                                        }
+                                                    })
+                                                    const formattedData = {
+                                                        userRef: req.token._id,
+                                                        restaurantId: body.restaurantId,
+                                                        subscriptionPlanRef: body.selectedPlanId,
+                                                        mealsDetails: mealSessions,
+                                                        addressRef: body.addressId,
+                                                        finalAmount: mealSessions.map(ele => ele.totalAmount).reduce((a, b) => a + b)
+                                                    }
+                                                    formattedData.orderAmountInPaisa = formattedData.finalAmount * 100
 
+                                                    console.log("data", formattedData)
+                                                    const instance = new Razorpay({
+                                                        key_id: process.env.RAZORPAY_KEY_ID,
+                                                        key_secret: process.env.RAZORPAY_KEY_SECRET,
+                                                    })
+                                                    const options = {
+                                                        amount: formattedData.orderAmountInPaisa,
+                                                        currency: "INR",
+                                                        receipt: String(Date.now())
+                                                    }
 
-    //                                                     return { ...data, addressRef, cuisineRef, endDate, pricePerMeal, pricePerDay, totalAmount }
-    //                                                 })
-    //                                                 const finalAmountPerDay = mealsDetails.map(meal => Number(meal.pricePerDay)).reduce((a, b) => a + b, 0)
-    //                                                 const finalAmount = finalAmountPerDay * plan.days
-    //                                                 const orderAmountInPaisa = finalAmount * 100
-    //                                                 const instance = new Razorpay({
-    //                                                     key_id: process.env.RAZORPAY_KEY_ID,
-    //                                                     key_secret: process.env.RAZORPAY_KEY_SECRET,
-    //                                                 })
-    //                                                 const options = {
-    //                                                     amount: orderAmountInPaisa,
-    //                                                     currency: "INR",
-    //                                                     receipt: String(Date.now())
-    //                                                 }
-
-    //                                                 instance.orders.create(options)
-    //                                                     .then((order) => {
-    //                                                         if (!order) {
-    //                                                             res.json({ error: "unable to generate orderId - razorpay error" })
-    //                                                         } else {
-    //                                                             const userRef = body.userId
-    //                                                             const subscriptionPlanRef = body.subscriptionPlanId
-    //                                                             const { restaurantId, subscriptionPlanId, userId, ...data } = body
-    //                                                             // console.log({ ...body, mealsDetails, finalAmountPerDay, finalAmount, orderAmountInPaisa, orderId: order.id, paymentStatus: "failed" })
-    //                                                             // console.log({ ...data, userRef, subscriptionPlanRef, , mealsDetails, finalAmountPerDay, finalAmount, orderAmountInPaisa, orderId: order.id, paymentStatus: "failed" })
-    //                                                             const newSubscription = new Subscription({ ...data, userRef, subscriptionPlanRef, mealsDetails, finalAmountPerDay, finalAmount, orderAmountInPaisa, orderId: order.id, paymentStatus: "failed" })
-    //                                                             newSubscription.save()
-    //                                                                 .then((subscription) => {
-    //                                                                     res.json({ message: "subscription created", subscription })
-    //                                                                 })
-    //                                                                 .catch((err) => {
-    //                                                                     res.json(err)
-    //                                                                 })
-    //                                                         }
-    //                                                     })
-    //                                                     .catch((err) => {
-    //                                                         res.json(err)
-    //                                                     })
-    //                                             }
-    //                                         })
-    //                                 }
-    //                             })
-    //                             .catch((err) => {
-    //                                 res.json(err)
-    //                             })
-    //                     }
-    //                 })
-    //         }
-    //     })
-    //     .catch((err) => {
-    //         res.json(err)
-    //     })
+                                                    instance.orders.create(options)
+                                                        .then((order) => {
+                                                            if (!order) {
+                                                                res.json({ error: "unable to generate orderId - razorpay error" })
+                                                            } else {
+                                                                formattedData.orderId = order.id
+                                                                const newSubscription = new Subscription(formattedData)
+                                                                newSubscription.save()
+                                                                    .then((subscription) => {
+                                                                        res.json({ message: "subscription created", subscription })
+                                                                    })
+                                                                    .catch((err) => {
+                                                                        res.json(err)
+                                                                    })
+                                                            }
+                                                        })
+                                                        .catch((err) => {
+                                                            res.json(err)
+                                                        })
+                                                }
+                                            })
+                                    }
+                                })
+                                .catch((err) => {
+                                    res.json(err)
+                                })
+                        }
+                    })
+            }
+        })
+        .catch((err) => {
+            res.json(err)
+        })
 }
 
 
@@ -129,12 +134,24 @@ subscriptionController.showByUserId = (req, res) => {
 }
 
 subscriptionController.showAll = (req, res) => {
-    Subscription.find()
+    const userRef = req.token._id
+    Subscription.find({ userRef }).populate("subscriptionPlanRef")
         .then((subscriptions) => {
             if (subscriptions.length === 0) {
                 res.json({ error: "no subscriptions" })
             } else {
-                res.json(subscriptions)
+
+                const sortedSubscriptions = subscriptions.sort((a, b) => {
+                    if (a.createdAt < b.createdAt) {
+                        return 1
+                    } else if (a.createdAt > b.createdAt) {
+                        return -1
+                    } else {
+                        return 0
+                    }
+                })
+
+                res.json({ subscriptions: sortedSubscriptions })
             }
         })
         .catch((err) => {
@@ -156,9 +173,8 @@ subscriptionController.showAllActive = (req, res) => {
         })
 }
 
-subscriptionController.updateVerifyAndUpdatePayment = (req, res) => { //move this to payment module
+subscriptionController.updateVerifyAndUpdatePayment = (req, res) => {
     const { order_id, payment_id, signature, subscriptionId } = req.body
-    // console.log(req.body)
     const isValid = validatePaymentVerification({ order_id, payment_id }, signature, process.env.RAZORPAY_KEY_SECRET)
     if (isValid) {
         Subscription.findById(subscriptionId)

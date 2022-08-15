@@ -6,7 +6,6 @@ const cuisineController = {}
 cuisineController.create = (req, res) => {
     const body = req.body
     body.img = `C:/Users/Geek/Desktop/DCT/foodbuddy_v1/food_app_v1_fs/images/${req.file.filename}`
-    // console.log("file", req.file)
     const newCuisine = new Cuisine(body)
     newCuisine.save()
         .then((cuisine) => {
@@ -27,7 +26,6 @@ cuisineController.show = (req, res) => {
                 res.json({ error: "invalid cuisine id" })
             } else {
                 res.json(cuisine)
-                // res.sendFile(cuisine.img) to send file to client
             }
         })
 }
