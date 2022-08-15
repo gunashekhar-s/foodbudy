@@ -7,7 +7,7 @@ import MainContainer from "../components/MainContainer"
 import SubscriptionConatiner from "../components/SubscriptionContainer"
 import ViewPlans from "../components/ViewPlans"
 import OrderDetails from "../components/OrderDetails";
-
+import PrivateRoute from "../components/PrivateRoute"
 const AppRouter = () => {
     return (
         <>
@@ -15,10 +15,10 @@ const AppRouter = () => {
             <Route path="/login" component={SignIn} />
             <Route path="/register" component={SignUp} />
             <Route path="/reset" component={Reset} />
-            <Route path="/user" component={MainContainer} />
-            <Route path="/new_subscription" component={SubscriptionConatiner} />
-            <Route path="/plans" component={ViewPlans} />
-            <Route path="/order_summary" component={OrderDetails} />
+            <PrivateRoute path="/user" component={MainContainer} />
+            <PrivateRoute path="/new_subscription" component={SubscriptionConatiner} />
+            <PrivateRoute path="/plans" component={ViewPlans} />
+            <PrivateRoute path="/order_summary" component={OrderDetails} />
         </>
     )
 
