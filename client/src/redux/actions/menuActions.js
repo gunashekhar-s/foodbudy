@@ -8,7 +8,6 @@ export const initialUpdateMenu = (data) => {
         payload: data
     }
 }
-
 export const asyncGetInitialMenu = (id) => {
     return (dispatch) => {
         axios.get(`/user/menu/${id}`, {
